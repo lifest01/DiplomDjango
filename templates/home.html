@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>Парсинг данных</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<body>
+    <div class="windowhome">
+        <div class="col-lg-10 col-md-10 col-xs-10">
+            <div class="card">
+              <div class="card-header">
+                Анализ защищенности пользователя социальной сети
+              </div>
+                <form action='/output/' method='post'>
+                      {% csrf_token %}
+                <div class="card-body">
+                    <div class="input-group mb-3">
+
+                        <input type="text" class="form-control" placeholder="Введите идентификатор страницы vk.com/" aria-label="Recipient's username" aria-describedby="button-addon2" name='param' required>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Получить данные</button>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

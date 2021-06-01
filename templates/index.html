@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+    <head>
+        <title>Анализ</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+<body>
+<!--Header Begin-->
+<div id="header">
+    <!--Menu Begin-->
+    <div id="menu">
+      <ul><form action='/output/' method='post'>
+            {% csrf_token %}
+
+        <li>Введите идентификатор страницы vk.com/
+            <input type='text' name='param' required>
+            <input type='submit' value='Получить данные'>
+            </form>
+        </li>
+      </ul>
+    </div>
+    <!--Menu END-->
+</div>
+<!--Header END-->
+<!--Toprow Begin-->
+<div id="toprow">
+  <div class="center">
+    <div class="box3">
+      <img height="300px" width="300px" src="{{data.photo_400}}" alt="Фото профиля">
+    </div>
+      <div class="box4">
+        <ul>
+            <h2>Данные о пользователе</h2>
+            Имя : {{ data.first_name }}<br><br>
+            Фамилия : {{ data.last_name }}<br><br>
+            {% if data.mobile_phone %}
+                Телефон : {{ data.mobile_phone }}<br><br>
+            {% endif %}
+            {% if data.site %}
+                Сайт : {{ data.site }}<br><br>
+            {% endif %}
+            {% if data.bdate %}
+                Дата рождения : {{ data.bdate }}<br><br>
+            {% endif %}
+            {%if data.occupation %}
+                Текущая деятельность : {{data.occupation.name}}({{data.occupation.type}})<br><br>
+            {% endif %}
+            {% if data.city %}
+                Город : {{ data.city.title }}<br><br>
+            {% endif %}
+            {%if data.instagram %}
+                Instagram : <a href="https://instagram.com/{{data.instagram}}" target="_blank">{{data.instagram}}</a><br><br>
+            {% endif %}
+            {% if data.career %}
+                Место работы :
+                {% for item in data.career %}
+                    {{ item.company }}
+                {% if item.group_id %}
+                    <a href="https://vk.com/public{{ item.group_id }}" target="_blank">Группа</a>
+                {% endif %}
+                {% endfor %}<br><br>
+            {% endif %}
+            {% if data.military %}
+                Военная служба : в\ч номер
+                {% for item in data.military %}
+                    {{ item.unit }}
+                {% endfor %}<br><br>
+            {% endif %}
+            {% if data.schools %}
+                {% for item in data.schools %}
+                    Школа : {{ item.name }}<br><br>
+                {% endfor %}
+            {% endif %}
+            {% if data.university_name %}
+                Университет : {{ data.university_name }}
+            {% endif %}
+        <!--<table border="single">
+                {% for k, v in data.items %}
+                    <tr>
+                        <th> {{ k }} </th>
+                        <td> {{ v }} </td>
+                   </tr>
+                {% endfor %}
+            </table>-->
+        </ul>
+        </div>
+  </div>
+</div>
+<!--Toprow END-->
+<!--MiddleRow Begin-->
+<div id="midrow">
+  <div id="container">
+    <div class="box">
+      <h1>Какие проблемы могут возникнуть</h1>
+        {% if data.mobile_phone %}
+            Размещение номера мобильного телефона в общем доступе повышает риск
+            стать жертвой Претекстинга или Смишинга<br><details> <br><b>Вишинг</b> — это одна из разновидностей фишинга, при котором
+            также используются методы социальной инженерии, но уже с помощью телефонного звонка.<br><br>
+            Как обычно действуют злоумышленники “вишеры”?<br><br>
+            На телефон поступает звонок от сотрудника банка и оператор предупреждает, если прямо сейчас не будет
+            предоставлена полная информация банковской карты ему по телефону, то карту заблокируют. Доверчивый
+            пользователь, слыша подобную «угрозу» сразу же впадает в панику и может выдать все персональные данные
+            вплоть до проверочного кода из SMS.
+            <br><br>
+            <b>Смишинг</b> - преступная схема направлена на переход
+            пользователем по вредоносной ссылке из SMS-сообщения.<br><br>
+            Cообщение может иметь вид сообщения от известного банка, знакомой компании или быть просто оповещением о
+            внезапном выигрыше в лотерею или в крупную акцию.<br>
+        </details><br><br>
+        {% endif %}
+        {% if data.military %}
+            Если вы являетесь действующим военнослужащим то размещение информации о месте
+            службы является нарушением согласно Федеральному закону «О статусе военнослужащих»<details>Военнослужащим запрещено:
+    <ul>
+        <li>размещать в Интернете и СМИ информацию (в том числе фото-, видеоматериалы, данные геолокации и другую информацию) о себе и других военнослужащих;</li>
+        <li>публиковать любую информацию, «позволяющую раскрыть их ведомственную принадлежность»;</li>
+        <li>размещать информацию о своей служебной деятельности либо служебной деятельности других военнослужащих, деятельности воинских частей, организаций и подразделений, в которых военнослужащие проходят военную службу;</li>
+        <li>распространять сведения о членах семей и родителях военнослужащих, в том числе «информацию, позволяющую определить место нахождения указанных лиц в определённый период».</li>
+    </ul></details><br><br>
+        {% endif %}
+        {% if data.career or data.occupation.type == "work" %}
+            Злоумышленник может использовать данные о том что вы работаете в этой организации
+            с целью нанести ущерб организации путем использования вас как источник конфиденциальных данных<br>
+            <details><br>Если у работодателя появляются доказательства того, что конфиденциальная информация была разглашена кем-то из его сотрудников, он вправе:<br>
+            <ul>
+                <li>применить дисциплинарное взыскание за ненадлежащее исполнение работником возложенных на него
+                    трудовых обязанностей, в том числе увольнение за разглашение охраняемой законом тайны(ст. 192, подп. «в» п. 6 ст. 81, ст. 90 ТК РФ);</li>
+                <li>взыскать прямой убыток, возникший в связи с разглашением такой информации, по правилам привлечения
+                    к материальной ответственности работника (а если человек уже не является сотрудником компании,
+                    то привлечь к гражданско-правовой ответственности в судебном порядке) (ст. 90, п. 7 ч. 1 ст. 243 ТК РФ; ч. 1 ст. 1472 ГК РФ);</li>
+                <li>обратиться в правоохранительные органы по факту выявления административного правонарушения или
+                    преступления — незаконного разглашения сведений, составляющих коммерческую тайну компании или
+                    персональные данные ее работников. (ч. 6 ст. 13.11 КоАП РФ; ч. 2 ст. 183 УК РФ).</li>
+            </ul></details><br><br>
+        {% endif %}
+        {% if data.site %}
+            Размещение электронной почты в общем доступе повышает риск стать жертвой фишинговой атаки<details>Фишинг может включать в себя вложение в электронном письме, которое загружает вредоносное ПО на компьютер, или ссылку на незаконный веб-сайт, которая может обманом заставить человека передать личную информацию.</details><br><br>
+        {% endif %}
+        {% if data.schools or data.university or data.occupation.type == "university" or data.occupation.type == "school" %}
+            Знание о месте учебы может быть использовано злоумышленником как источник дополнительной информации
+            о вас от сокурсников, одногруппников и т.д.<br><br>
+        {% endif %}
+    </div>
+    <div class="box">
+      <h1>Рекомендации по обеспечению безопасности</h1>
+            Измените настройки приватности чтобы ваши данные не были доступны всем пользователям и
+            закройте свой аккаунт от посторонних<a href="https://vk.com/settings?act=privacy" class="button" target="_blank"><span>Изменить настройки приватности</span></a><br><br>
+        {% if data.mobile_phone %}
+            Уберите свой номер телефона из общего доступа, если вам нужно чтобы с вами могли связаться, то измените
+            настройки приватности личной информации только для друзей, так вы снизите вероятность попадания номера
+            телефона к незнакомым людям <a href="https://vk.com/edit?act=contacts" class="button" target="_blank"><span>Изменить видимость личных данных</span></a><br><br>
+        {% endif %}
+        Ограничьте контакты в сети с незнакомыми людьми. Никогда не сообщайте им личных данных.<br>
+        Не переходите по подозрительным ссылкам, даже если получили их по почте или в сообщении от знакомого пользователя.<br>
+        Не скачивайте файлы на подозрительных или ненадёжных сайтах.<br>
+    </div>
+  </div>
+</div>
+<!--MiddleRow END-->
+<!--BottomRow Begin-->
+<div id="bottomrow">
+  <div class="textbox">
+    <iframe width="1000" height="750" class="rssdog" src="https://www.rssdog.com/index.php?url=http%3A%2F%2Fwww.securitylab.ru%2F_services%2Fexport%2Frss%2F&mode=html&showonly=&maxitems=15&showdescs=1&desctrim=0&descmax=0&tabwidth=100%25&utf8=1&linktarget=_blank&bordercol=%23d4d0c8&headbgcol=%23999999&headtxtcol=%23ffffff&titlebgcol=%23f1eded&titletxtcol=%23000000&itembgcol=%23ffffff&itemtxtcol=%23000000&ctl=0"></iframe>
+  </div>
+</div>
+
+<!--BottomRow END-->
+<!--Footer Begin-->
+<div id="footer">
+  <div class="foot"> <span>Анализ данных</span> by <a href="https://github.com/lifest01" target="_blank"><img height="25" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFSIO_dsJJiOX3Sntwxpw6lUIJKI0ueBlRpcQ3q57xVOw4-bCAQ2eX0v_5v2sf5CIiNA&usqp=CAU" alt="Гитхаб"> Lifest</a> </div>
+</div>
+<!--Footer END-->
+</body>
+</html>
